@@ -1,0 +1,14 @@
+<html>
+	<head>
+		<title>Test page</title>
+	</head>
+<body>
+<h1>Hello World!</h1>
+
+<b>Date:</b> <i>${anttemplate.date}</i>.
+
+<br>	
+<hr>
+<i>${test.copyright}</i>	
+</body>
+</html>

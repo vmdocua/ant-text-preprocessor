@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Test Ant Text Preprocessor" default="main" basedir=".">
+
+	<property name="test.dir" value="test"/>
+	<property file="build.properties"/>
+	
+	<target name="anttemplate">
+		<property name="dir.in"  value="${dir}"/>
+		<property name="dir.out" value="${dir}"/>
+		
+		<echo>dir.in=${dir.in}, dir.out=${dir.out}</echo>
+		
+		<tstamp>
+			<format property="anttemplate.date" pattern="dd-MMM-yyyy HH:mm:ss"/>	
+		</tstamp>
+		<property name="anttemplate.info" value="NOTE: Automatically generated file by Vadim Melnik Ant Text Preprocessor : ${anttemplate.date}"/>
+		
+		<mkdir dir="${dir.out}"/>
+		
+		<copy todir="${dir.out}" verbose="true" overwrite="true" failonerror="true">
+			<fileset dir="${dir.in}">
+				 <include name="**/*.anttemplate"/>
+			</fileset>
+			<mapper>
+				<globmapper from="*.anttemplate" to="*"/>
+			</mapper>
+	        <filterchain>
+				<expandproperties/>
+	        </filterchain>
+		</copy>
+		<antcall target="anttemplate-delete-template">
+			<param name="dir" value="${dir.in}"/>
+		</antcall>
+	</target>	
+
+	<target name="anttemplate-delete-template">
+		<delete verbose="true">
+			<fileset dir="${dir}">
+				 <include name="**/*.anttemplate"/>
+			</fileset>
+		</delete>
+	</target>
+
+	<target name="create-test-dir">
+		<echo>Prepare test folder</echo>
+		<mkdir dir="${test.dir}"/>
+		<delete dir="${test.dir}"/>
+		
+		<copy todir="${test.dir}" overwrite="true">
+			<fileset dir="src"/>
+		</copy>
+	</target>
+	
+	
+	<target name="main" depends="create-test-dir">
+		<echo message="Test Ant Template Preprocessor" />
+		
+		<antcall target="anttemplate">
+			<param name="dir" value="${test.dir}"/>
+		</antcall>
+	</target>
+</project>
